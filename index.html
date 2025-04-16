@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Interactive Form</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 40px;
+    }
+
+    form {
+      max-width: 500px;
+    }
+
+    input, textarea {
+      display: block;
+      width: 100%;
+      margin-bottom: 15px;
+      padding: 10px;
+      font-size: 16px;
+    }
+
+    .error {
+      color: red;
+      font-size: 14px;
+    }
+
+    .success {
+      color: green;
+      font-size: 18px;
+      margin-top: 20px;
+    }
+
+    #charCount {
+      font-size: 14px;
+      text-align: right;
+      margin-top: -10px;
+      margin-bottom: 15px;
+      color: #666;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Contact Us</h1>
+  <form id="contactForm">
+    <label for="name">Name:</label>
+    <input type="text" id="name" name="name" required>
+
+    <label for="email">Email:</label>
+    <input type="text" id="email" name="email" required>
+
+    <label for="message">Message:</label>
+    <textarea id="message" name="message" rows="5" maxlength="200" required></textarea>
+    <div id="charCount">0 / 200</div>
+
+    <button type="submit">Send</button>
+    <div id="formMessage"></div>
+  </form>
+
+  <script>
+    const form = document.getElementById('contactForm');
+    const nameInput = document.getElementById('name');
+    const emailInput = document.getElementById('email');
+    const messageInput = document.getElementById('message');
+    const formMessage = document.getElementById('formMessage');
+    const charCount = document.getElementById('charCount');
+
+    // Real-time character count
+    messageInput.addEventListener('input', () => {
+      const len = messageInput.value.length;
+      charCount.textContent = `${len} / 200`;
+    });
+
+    // Form validation on submit
+    form.addEventListener('submit', function (e) {
+      e.preventDefault(); // Prevent form from submitting
+
+      // Clear previous messages
+      formMessage.textContent = '';
+      formMessage.className = '';
+
+      const name = nameInput.value.trim();
+      const email = emailInput.value.trim();
+      const message = messageInput.value.trim();
+
+      if (!name || !email || !message) {
+        formMessage.textContent = 'Please fill in all fields.';
+        formMessage.className = 'error';
+        return;
+      }
+
+      if (!validateEmail(email)) {
+        formMessage.textContent = 'Please enter a valid email address.';
+        formMessage.className = 'error';
+        return;
+      }
+
+      // Simulate form submission
+      formMessage.textContent = 'Thanks for your message, we\'ll be in touch!';
+      formMessage.className = 'success';
+      form.reset();
+      charCount.textContent = '0 / 200';
+    });
+
+    // Simple email validation
+    function validateEmail(email) {
+      const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      return re.test(email.toLowerCase());
+    }
+  </script>
+
+</body>
+</html>
